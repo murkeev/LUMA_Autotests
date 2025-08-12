@@ -1,7 +1,7 @@
 import {Page} from "@playwright/test";
 import {AbstractPage} from './AbstractPage';
 
-export class LoginPage extends AbstractPage {
+export class AuthPage extends AbstractPage {
 
     private firstName = '#firstname';
     private lastName = '#lastname';

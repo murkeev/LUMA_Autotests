@@ -1,13 +1,13 @@
-import {LoginPage} from "./LoginPage";
+import {AuthPage} from "./AuthPage";
 import {Page} from "@playwright/test";
 import {PanelHeader} from "../sections/PanelHeader";
 
 export class PageHolder {
-    login: LoginPage
+    auth: AuthPage
     panelHeader: PanelHeader;
 
     constructor(page: Page) {
-        this.login  = new LoginPage(page);
+        this.auth  = new AuthPage(page);
 
 
         this.panelHeader = new PanelHeader(page);
