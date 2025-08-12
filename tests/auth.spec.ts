@@ -9,18 +9,18 @@ test.describe('Login and Registration', async () => {
     test('Should create an account', async ({app, page}) => {
         const ad = new Ad(page);
 
-        await app.login.goto();
+        await app.auth.goto();
 
-        await app.login.clickCreateAccount();
+        await app.auth.clickCreateAccount();
         await ad.closeAd();
-        await app.login.fillRegisterForm(
+        await app.auth.fillRegisterForm(
             'John',
             'Doe',
             email,
             'JohnDoe123!',
             'JohnDoe123!'
         );
-        await app.login.submitRegistration();
+        await app.auth.submitRegistration();
 
         await expect(page.locator('[data-ui-id="message-success"]'))
             .toHaveText('Thank you for registering with Main Website Store.');
@@ -32,11 +32,11 @@ test.describe('Login and Registration', async () => {
     test('Should login into account', async ({app, page}) => {
         const ad = new Ad(page);
 
-        await app.login.goto();
+        await app.auth.goto();
 
-        await app.login.clickSignIn();
-        await app.login.fillLoginForm('zixumyduzy@mailinator.com', 'JohnDoe123!');
-        await app.login.submitSignIn();
+        await app.auth.clickSignIn();
+        await app.auth.fillLoginForm('zixumyduzy@mailinator.com', 'JohnDoe123!');
+        await app.auth.submitSignIn();
         // await page.waitForLoadState('domcontentloaded')
         await page.waitForLoadState('load')
         await app.panelHeader.openCustomerMenu()
