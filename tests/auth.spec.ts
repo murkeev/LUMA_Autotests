@@ -1,26 +1,26 @@
-import {expect, test} from "@playwright/test";
+import {test} from "../fixtures/Pages";
 import {randomInt} from "node:crypto";
-import {LoginPage} from "../ui/page-objects/pages/LoginPage";
+import {expect} from "@playwright/test";
 import {Ad} from "../ui/page-objects/iframes/Ad";
-import {PanelHeader} from "../ui/page-objects/sections/PanelHeader";
 
 test.describe('Login and Registration', async () => {
     const email = `JohnDoe+${randomInt(1, 100000)}@gmail.com`
 
-    test('Should create an account', async ({page}) => {
+    test('Should create an account', async ({app, page}) => {
         const ad = new Ad(page);
-        const register = new LoginPage(page);
-        await register.goto();
 
-        await register.clickCreateAccount();
-        await ad.closeAd()
-        await register.fillRegisterForm(
+        await app.login.goto();
+
+        await app.login.clickCreateAccount();
+        await ad.closeAd();
+        await app.login.fillRegisterForm(
             'John',
             'Doe',
-            email, 'JohnDoe123!',
+            email,
+            'JohnDoe123!',
             'JohnDoe123!'
-        )
-        await register.submitRegistration();
+        );
+        await app.login.submitRegistration();
 
         await expect(page.locator('[data-ui-id="message-success"]'))
             .toHaveText('Thank you for registering with Main Website Store.');
@@ -29,24 +29,18 @@ test.describe('Login and Registration', async () => {
             .toContainText(email)
     })
 
-    test('Should login into account', async ({page}) => {
-        const login = new LoginPage(page);
-        const panelHeader = new PanelHeader(page);
+    test('Should login into account', async ({app, page}) => {
         const ad = new Ad(page);
 
-        await login.goto();
-        await login.clickSignIn();
-        await login.fillLoginForm('zixumyduzy@mailinator.com', 'JohnDoe123!');
-        await login.submitSignIn();
+        await app.login.goto();
 
-        await page.waitForLoadState('domcontentloaded')
+        await app.login.clickSignIn();
+        await app.login.fillLoginForm('zixumyduzy@mailinator.com', 'JohnDoe123!');
+        await app.login.submitSignIn();
+        // await page.waitForLoadState('domcontentloaded')
         await page.waitForLoadState('load')
-
-
-        await panelHeader.openCustomerMenu()
-        await panelHeader.clickNavigation("My Account");
-
-
+        await app.panelHeader.openCustomerMenu()
+        await app.panelHeader.clickNavigation("My Account");
         await ad.closeAd();
 
         await expect(page).toHaveURL('https://magento.softwaretestingboard.com/customer/account/');
